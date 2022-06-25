@@ -1,14 +1,25 @@
 version: 2.1
-orbs:
-  node: circleci/node@4.7
-  
+executors:
+  my-custom-executor:
+    docker:
+      - image: cimg/base:stable
+        auth:
+          # ensure you have first added these secrets
+          # visit app.circleci.com/settings/project/github/RizwanMushtaq/angular-weather-app/environment-variables
+          username: $DOCKER_HUB_USER
+          password: $DOCKER_HUB_PASSWORD
 jobs:
   build:
-    version: '16.10'
-    pkg-manager: npm
-    environment:
-      CHROME_BIN: /usr/bin/google-chrome
+
+    executor: my-custom-executor
     steps:
-      - run: npm install
-      - run: npm test
-      - run: npm build
+      - checkout
+      - run: |
+          npm run test
+          npm run build
+          
+
+workflows:
+  my-custom-workflow:
+    jobs:
+      - build
