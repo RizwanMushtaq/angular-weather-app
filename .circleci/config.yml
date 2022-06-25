@@ -1,27 +1,15 @@
 version: 2.1
-executors:
-  my-custom-executor:
-    docker:
-      - image: cimg/base:stable
-        auth:
-          # ensure you have first added these secrets
-          # visit app.circleci.com/settings/project/github/RizwanMushtaq/angular-weather-app/environment-variables
-          username: $DOCKER_HUB_USER
-          password: $DOCKER_HUB_PASSWORD
+orbs:
+  node: circleci/node@4.7.0
 jobs:
   build:
-
-    executor: my-custom-executor
+    executor:
+      name: node/default
+      tag: '10.4'
     steps:
       - checkout
-      - run: |
-          npm ci
-          cd ./node_modules/protractor && npm i webdrivermanager@latest
-          npm run test
-          npm run build
-          
+      - node/with-cache:
+          steps:
+            - run: npm install
+      - run: npm run test
 
-workflows:
-  my-custom-workflow:
-    jobs:
-      - build
