@@ -9,22 +9,14 @@ import { CurrentWeatherService } from './current-weather.service';
 })
 export class CurrentWeatherComponent implements OnInit {
   current: ICurrentWeather;
-  constructor(private currentWeatherService: CurrentWeatherService) {
-    this.current = {
-      city: 'Munich',
-      country: 'Germany',
-      date: new Date(),
-      temperature: 72,
-      description: 'sunny',
-    };
-  }
+  constructor(private currentWeatherService: CurrentWeatherService) {}
 
   ngOnInit(): void {
     this.currentWeatherService
-      .getCurrentWeather('Bethesda', 'US')
+      .getCurrentWeather('Munich', 'de')
       .subscribe((data) => {
         console.log(data);
-        this.current.city = data.name;
+        this.current = { ...data };
       });
   }
 }

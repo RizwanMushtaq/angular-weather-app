@@ -1,7 +1,7 @@
 export interface ICurrentWeather {
   city: string;
   country: string;
-  date: Date;
+  date: number;
   temperature: number;
   description: string;
 }

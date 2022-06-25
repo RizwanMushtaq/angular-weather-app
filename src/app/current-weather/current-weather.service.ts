@@ -15,6 +15,23 @@ export class CurrentWeatherService {
       .set('q', `${city},${country}`)
       .set('appid', environment.appId);
 
-    return this.httpClient.get(environment.baseUrl, { params: uriParams });
+    return this.httpClient
+      .get(environment.baseUrl, { params: uriParams })
+      .pipe(map((data) => this.transformToICurrentWeather(data)));
+  }
+
+  private transformToICurrentWeather(data: any): ICurrentWeather {
+    console.log(data);
+    return {
+      city: data.name,
+      country: data.sys.country,
+      date: data.dt * 1000,
+      temperature: this.convertKelvinToCelsius(data.main.temp),
+      description: data.weather[0].description,
+    };
+  }
+
+  private convertKelvinToCelsius(kelvin: number): number {
+    return kelvin - 273.15;
   }
 }
